@@ -3,9 +3,11 @@ package repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/spf13/viper"
+	"os"
 )
 
-const projectsTable = "projects"
+const instancesTable = "instances"
 
 type Config struct {
 	Host     string
@@ -29,4 +31,15 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	}
 
 	return db, nil
+}
+
+func NewRepoConfig() Config {
+	return Config{
+		Host:     viper.GetString("db.host"),
+		Port:     viper.GetString("db.port"),
+		Username: viper.GetString("db.username"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   viper.GetString("db.dbname"),
+		SSLMode:  viper.GetString("db.sslmode"),
+	}
 }

@@ -1,15 +1,27 @@
 package main
 
 import (
-	Backend "backend"
-
+	CAndC "candc"
+	"candc/configs"
+	"candc/internal/handler"
+	"candc/internal/repository"
+	"candc/internal/usecase"
 	"go.uber.org/fx"
-	"net/http"
 )
 
 func main() {
 	fx.New(
-		fx.Provide(Backend.NewHTTPServer),
-		fx.Invoke(func(*http.Server) {}),
+		fx.Provide(
+			configs.NewServiceConfig,
+			repository.NewRepoConfig,
+			repository.NewPostgresDB,
+			repository.NewRepo,
+			usecase.NewUseCase,
+			handler.NewHandler,
+			handler.InitRoute,
+			CAndC.NewServer,
+		),
+		fx.Invoke(CAndC.StartServer),
 	).Run()
+
 }
