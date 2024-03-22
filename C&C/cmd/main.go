@@ -5,7 +5,7 @@ import (
 	"candc/configs"
 	"candc/internal/handler"
 	"candc/internal/repository"
-	"candc/internal/usecase"
+	"candc/internal/service"
 	"context"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -25,7 +25,7 @@ func main() {
 			repository.NewRepoConfig,
 			repository.NewPostgresDB,
 			repository.NewRepo,
-			usecase.NewUseCase,
+			service.NewService,
 			handler.NewHandler,
 			handler.InitRoute,
 			CAndC.NewServer,
