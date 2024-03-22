@@ -1,24 +1,25 @@
 package repository
 
 import (
-	"backend/entity"
+	"candc/entity"
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
-type Project interface {
-	CreateProject()
-	GetProject(id int64) (entity.Project, error)
-	GetAllProjects()
-	UpdateProject()
-	DeleteProject()
+type IRepoInstance interface {
+	CreateInstance(instance entity.Instance) error
+	GetInstance(id int64) ([]entity.Instance, error)
+	GetAllInstances() ([]entity.Instance, error)
+	UpdateInstance(instance entity.Instance) error
+	DeleteInstance(id int64) error
 }
 
 type Repository struct {
-	Project
+	IRepoInstance
 }
 
-func NewRepo(db *sqlx.DB) *Repository {
+func NewRepo(db *sqlx.DB, logger *zap.Logger) *Repository {
 	return &Repository{
-		Project: NewProjectDB(db),
+		IRepoInstance: NewInstanceDB(db, logger),
 	}
 }
